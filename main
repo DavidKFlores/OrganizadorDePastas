@@ -1,0 +1,43 @@
+import os
+import shutil
+import tkinter as tk
+from tkinter import filedialog
+
+
+def organizar_arquivos(diretorio):
+    for filename in os.listdir(diretorio):
+        filepath = os.path.join(diretorio, filename)
+
+        if os.path.isfile(filepath):
+            extensao = filename.split('.')[-1].lower()
+            destino = os.path.join(diretorio, extensao.capitalize() + 's')
+            if not os.path.exists(destino):
+                os.makedirs(destino)
+            destino_arquivo = os.path.join(destino, filename)
+            shutil.move(filepath, destino_arquivo)
+
+
+def selecionar_pasta():
+    pasta_selecionada = filedialog.askdirectory()
+    if pasta_selecionada:
+        organizar_arquivos(pasta_selecionada)
+        resultado_var.set("Arquivos organizados com sucesso!")
+
+# Criando a interface gráfica
+
+
+root = tk.Tk()
+root.title("Organizador de Arquivos")
+
+# Botão para selecionar a pasta
+botao_selecionar = tk.Button(root, text="Selecionar Pasta",
+                             command=selecionar_pasta)
+botao_selecionar.pack(pady=20)
+
+# Variável para exibir o resultado
+resultado_var = tk.StringVar()
+resultado_label = tk.Label(root, textvariable=resultado_var)
+resultado_label.pack()
+
+# Iniciar o loop principal da interface gráfica
+root.mainloop()
